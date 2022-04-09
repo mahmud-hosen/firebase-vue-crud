@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue CRUD</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="vue.min.js"></script>
+   
+     <script src="https://www.gstatic.com/firebasejs/4.10.0/firebase.js"></script>
+    <script>
+        var config = {
+            apiKey: "AIzaSyD41YxY984cOnkxagBf80WObFK_BS5BEwo",
+            authDomain: "crud-102ef.firebaseapp.com",
+            projectId: "crud-102ef",
+            storageBucket: "crud-102ef.appspot.com",
+            messagingSenderId: "119358664400",
+            appId: "1:119358664400:web:b5471db9124927ba5b78d5",
+            measurementId: "G-291CCCT485"
+        };
+
+    </script>
+     
+    
+
+</head>
+
+<body>
+    <div id="app">
+        <div class="container">
+            <p class="txtCenter">
+                <input type="text" v-model="newUser.name" placeholder="User Name">
+                <input type="text" v-model="newUser.email" placeholder="Email">
+                <button class="add" @click="addNewUser()">ADD</button>
+            </p>
+            <br>
+
+            <table>
+                <tr >
+                    <th>User Name</th>
+                    <th>Email</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+
+                </tr>
+                <tr v-for="user in users">
+                    <td> <input v-if="selectedUser.key == user.key" v-model="selectedUser.val.name">
+                        <p v-else>{{user.val.name}}</p>
+                    </td>
+                    
+                    <td>
+                        <input v-if="selectedUser.key == user.key" v-model="selectedUser.val.email">
+                        <p v-else>{{user.val.email}}</p>
+                    </td>
+
+                    <td> 
+                        <button class="edit" @click="selectedUser = user" v-if="selectedUser.key != user.key" >Edit</button> 
+                        <button class="edit" @click="updateUser()" v-else>Done</button>
+                    </td>
+                    <td><button class="delete" @click="deleteUser(user.key)">Delete</button></td>
+                </tr>
+            </table>
+
+        </div>
+    </div>
+    <script>
+                
+
+    var app = new Vue({
+            el: '#app',
+            info: [],
+            data: {
+                newUser: { name: "", email: "" },
+                dbRef: null,
+                users:[],
+                selectedUser: {},
+            },
+            methods: {
+                addNewUser() {
+                    // console.log(this.newUser);           
+                    this.dbRef.push(this.newUser);  
+                    
+                    // Empty input field after insert data
+                    this.newUser = { name: "", email: "" };
+                },
+                deleteUser(key) {
+                    this.dbRef.child(key).remove();
+                },
+                updateUser() {
+                    // console.log(this.selectedUser.val)
+                    this.dbRef.child(this.selectedUser.key).update(this.selectedUser.val);
+                    this.selectedUser = {};
+                },
+                
+            },
+            mounted: function () {
+                console.log("Success");
+                
+                var config = {
+                    apiKey: "AIzaSyD41YxY984cOnkxagBf80WObFK_BS5BEwo",
+                    authDomain: "crud-102ef.firebaseapp.com",
+                    databaseURL:"https://crud-102ef-default-rtdb.firebaseio.com",
+                    projectId: "crud-102ef",
+                    storageBucket: "crud-102ef.appspot.com",
+                    messagingSenderId: "119358664400",
+                    appId: "1:119358664400:web:b5471db9124927ba5b78d5",
+                    measurementId: "G-291CCCT485"
+                };
+
+                var firebaseApp = firebase.initializeApp(config);
+                this.dbRef = firebaseApp.database().ref("users");
+
+                let ci = this;
+
+                this.dbRef.on("value",function(snapshot)
+                {
+                    ci.users = [];
+                    snapshot.forEach(function(childSnapshot)
+                    {
+                        // console.log(childSnapshot.val());
+                       ci.users.push({key: childSnapshot.key, val: childSnapshot.val()});
+                    //    console.log(this.users);
+
+                    })
+                })
+               
+
+
+            }
+        })
+    </script>
+
+</body>
+
+</html>

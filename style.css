@@ -1,0 +1,82 @@
+*{
+	margin: 0;
+	padding: 0;
+}
+
+body{
+	background: #f3f3f3;
+}
+
+#app{
+	width: 960px;
+	padding: 44px 22px;
+	margin: auto;
+}
+
+table{
+	width: 100%;
+	border-collapse: collapse;
+}
+
+tr{
+	background: #f9f9f9;
+}
+
+tr:nth-child(odd){
+	background: #fff;
+}
+
+tr:hover{
+	background: #fffeee;
+}
+
+th{
+	background: #0f7d73;
+	color: #fff;
+}
+
+td, th{
+	padding: 9px;
+	text-align: center;
+}
+
+input{
+	padding: 5px;
+	text-align: center;
+}
+
+input.edit{
+	padding: 4px;
+}
+
+
+button.add{
+	padding: 6px 44px;
+    background: #2e56da;
+    border: 1px solid #015049;
+    color: #fff;
+}
+
+p.txtCenter{
+	text-align: center;
+}
+
+.username, .email{
+	width: 255px;
+}
+
+button.edit{
+	padding: 3px 6px;
+    color: #fff;
+    background: #68af00;
+    border: 1px solid #007900;
+    cursor: pointer;
+}
+
+button.delete{
+	padding: 3px 6px;
+    color: #fff;
+    background: #dc5629;
+    border: 1px solid #920000;
+    cursor: pointer;
+}
